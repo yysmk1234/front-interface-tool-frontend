@@ -3,7 +3,7 @@
         <Layout style="height:100%">
             <Sider ref="side1" hide-trigger collapsible :collapsed-width="78" v-model="isCollapsed" >
                 <Menu theme="dark" width="auto" :class="menuitemClasses">
-                    <MenuItem name="1-1" to="request">
+                    <MenuItem name="1-1" to="setResponse">
                         <Icon type="ios-navigate"></Icon>
                         <span>请求编辑</span>
                     </MenuItem>
@@ -11,7 +11,7 @@
                         <Icon type="ios-search"></Icon>
                         <span>检索</span>
                     </MenuItem>
-                    <MenuItem name="1-3" to="set">
+                    <MenuItem name="1-3" to="setServer">
                         <Icon type="ios-settings"></Icon>
                         <span>设置</span>
                     </MenuItem>

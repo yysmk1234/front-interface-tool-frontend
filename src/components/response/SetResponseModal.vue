@@ -2,28 +2,42 @@
     <div>
         <Modal
             v-model="innerisShowModal"
-            title="Common Modal dialog box title"
+            title="response属性"
             @on-ok="ok"
             @on-cancel="cancel">
-            <p>Content of dialog</p>
-            <p>Content of dialog</p>
-            <p>Content of dialog</p>
+            <Form :label-width="80">
+                <FormItem label="method">
+                    <Select v-model="responseData.method" style="width:100px">
+                        <Option value="GET">GET</Option>
+                        <Option value="POST">POST</Option>
+                        <Option value="PUT">PUT</Option>
+                        <Option value="DELETE">DELETE</Option>
+                    </Select>
+                </FormItem>
+                <FormItem label="url">
+                    <Input v-model="responseData.url" placeholder="请输入请求路径" style="width:300px" />
+                </FormItem>
+            </Form>
         </Modal>
     </div>
 </template>
 
 <script>
-import { Modal } from 'view-design'
+import { Modal , Form ,  FormItem , Input , Select , Option} from 'view-design'
 
 export default {
     props:['isShowModal'],
     name:"SetResponseModal",
     components:{
-        Modal
+        Modal , Form ,  FormItem , Input , Select , Option
     },
     data() {
         return {
-            innerisShowModal:this.isShowModal
+            innerisShowModal:this.isShowModal,
+            responseData:{
+                method:"",
+                url:""
+            }
         }
     },
     methods: {
