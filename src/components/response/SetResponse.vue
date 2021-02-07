@@ -9,13 +9,14 @@
                 <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </template>
         </Table>
-        <SetResponseModal :is-show-modal="modalData.isShow"/>
+        <SetResponseModal :is-show-modal="modalData.isShow" @add-response="handleAddResponse"/>
     </div>
 </template>
 
 <script>
 import { Button , Table } from 'view-design'
 import SetResponseModal from './SetResponseModal'
+import {addResponse} from '../../api/setResponse'
 export default {
     name:"SetResponse",
     components:{
@@ -77,6 +78,11 @@ export default {
         showModal () {
             this.modalData.isShow = true;
         },
+        handleAddResponse(data){
+            addResponse(data).then(res=>{
+                console.log(res);
+            })
+        },
         show (index) {
             this.$Modal.info({
                 title: 'User Info',
@@ -85,7 +91,8 @@ export default {
         },
         remove (index) {
             this.tableData.splice(index, 1);
-        }
+        },
+        
     }
 }
 </script>
