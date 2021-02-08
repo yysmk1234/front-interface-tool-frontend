@@ -79,6 +79,7 @@ export default {
             this.modalData.isShow = true;
         },
         handleAddResponse(data){
+            console.log(1);
             addResponse(data).then(res=>{
                 console.log(res);
             })
