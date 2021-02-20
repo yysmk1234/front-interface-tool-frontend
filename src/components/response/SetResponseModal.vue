@@ -53,8 +53,9 @@ export default {
     },
     methods: {
         ok () {
-            this.$Message.info('Clicked ok');
+            this.innerisShowModal = false;
             this.$emit("add-response",this.responseData);
+            this.$emit("show-modal",this.innerisShowModal);
             this.responseData = {
                 method:"",
                 url:"",
@@ -63,11 +64,13 @@ export default {
             }
         },
         cancel () {
-            this.$Message.info('Clicked cancel');
+            this.innerisShowModal = false;
+            this.$emit("show-modal",this.innerisShowModal);
         }
     },
     watch:{
-        isShowModal(newValue){
+        isShowModal(newValue,oldValue){
+            console.log(newValue);
             this.innerisShowModal = newValue;
         }
     }

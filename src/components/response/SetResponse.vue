@@ -9,7 +9,10 @@
                 <Button type="error" size="small" @click="remove(index)">Delete</Button>
             </template>
         </Table>
-        <SetResponseModal :is-show-modal="modalData.isShow" @add-response="handleAddResponse"/>
+        <SetResponseModal 
+        :is-show-modal="modalData.isShow" 
+        @add-response="handleAddResponse" 
+        @show-modal="showModel"/>
     </div>
 </template>
 
@@ -79,10 +82,13 @@ export default {
             this.modalData.isShow = true;
         },
         handleAddResponse(data){
-            console.log(1);
             addResponse(data).then(res=>{
                 console.log(res);
             })
+        },
+        showModel(data){
+            console.log(data);
+            this.modalData.isShow = false;
         },
         show (index) {
             this.$Modal.info({

@@ -45,7 +45,7 @@ export default {
     methods: {
         startServer(){
             var _this = this;
-            this.axios.get("http://localhost:9001/manager/restartInterfaceServer").then((res)=>{
+            this.axios.get("http://localhost:9000/manager/restartInterfaceServer").then((res)=>{
                 console.log("startRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
             }).catch((err)=>{
@@ -54,7 +54,7 @@ export default {
         },
         shutdownServer(){
             var _this = this;
-            this.axios.get("http://localhost:9001/manager/shutDownInterfaceServer").then((res)=>{
+            this.axios.get("http://localhost:9000/manager/shutDownInterfaceServer").then((res)=>{
                 console.log("shutdownRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
             }).catch((err)=>{
