@@ -1,29 +1,38 @@
 <template>
     <div class="response-container">
         <div class="button-group">
-            <Button type="info" @click="showModal">新增</Button>
+            <Button type="info" @click="showAddModal">新增</Button>
         </div>
         <Table :columns="tableData.columns" :data="tableData.data">
             <template slot-scope="{ row, index }" slot="action">
-                <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">View</Button>
-                <Button type="error" size="small" @click="remove(index)">Delete</Button>
+                <Button type="primary" size="small" style="margin-right: 5px" @click="show(index)">查看</Button>
+                <Button type="warning" size="small" style="margin-right: 5px" @click="showUpdateModal(index)">编辑</Button>
+                <!-- <Button type="error"   size="small" @click="remove(index)">删除</Button> -->
             </template>
         </Table>
         <SetResponseModal 
         :is-show-modal="modalData.isShow" 
         @add-response="handleAddResponse" 
-        @show-modal="showModel"/>
+        @show-modal-add="showModel"/>
+
+        <UpdateResponseModal 
+        :is-show-modal="modalData.updateShow" 
+        :data="modalData.data"
+        @update-response="handleUpdateResponse" 
+        @show-modal-update="showModelUpdate"/>
     </div>
 </template>
 
 <script>
 import { Button , Table } from 'view-design'
 import SetResponseModal from './SetResponseModal'
-import {addResponse} from '../../api/setResponse'
+import UpdateResponseModal from './UpdateResponseModal'
+import {addResponse , getResponse , updateResponseById } from '../../api/setResponse'
+import { RESPONSE_CODE_SUCCESS , RESPONSE_CODE_FAIL } from '../../api/responseCode'
 export default {
     name:"SetResponse",
     components:{
-        Table ,Button , SetResponseModal
+        Table ,Button , SetResponseModal , UpdateResponseModal
     },
     data() {
         return {
@@ -43,61 +52,93 @@ export default {
                     key: 'url'
                 },
                 {
-                    title: 'response',
-                    key: 'response'
-                },
-                {
                     title: 'delayTime',
                     key: 'delayTime'
                 },
                 {
+                    title: 'statusCode',
+                    key: 'statusCode'
+                },
+                {
+                    title: 'body',
+                    key: 'body'
+                },
+                {
                     title: 'Action',
                     slot: 'action',
-                    width: 150,
+                    width: 200,
                     align: 'center'
                 }
             ],
             data:[
-                {
-                    method: 'post',
-                    url: '/data',
-                    response: '{code:0}',
-                    delayTime: 3000
-                },
-                {
-                    method: 'post',
-                    url: '/data',
-                    response: '{code:0}',
-                    delayTime: 3000
-                },
             ]
             },
             modalData:{
-                isShow:false
+                isShow:false,
+                updateShow:false,
+                data:{}
             }
         }
     },
+    mounted() {
+        this.getResponseList();
+    },
     methods: {
-        showModal () {
+        showAddModal () {
             this.modalData.isShow = true;
+        },
+        showUpdateModal ( index ) {
+            this.modalData.updateShow = true;
+            this.modalData.data = this.tableData.data[index];
         },
         handleAddResponse(data){
             addResponse(data).then(res=>{
+                if(res.data.code == RESPONSE_CODE_SUCCESS.INSERT){
+                    this.$Message.success('添加成功');
+                    this.getResponseList();
+                }else {
+                    this.$Message.error('添加失败');
+                }
+            })
+        },
+        handleUpdateResponse(data){
+            updateResponseById(data).then(res=>{
+                if(res.data.code == RESPONSE_CODE_SUCCESS.UPDATE){
+                    this.$Message.success('修改成功');
+                    this.getResponseList();
+                }else {
+                    this.$Message.error('修改失败');
+                }
+            })
+        },
+        getResponseList(){
+            var _this = this;
+            getResponse().then(res=>{
                 console.log(res);
+                if(res.data.code = RESPONSE_CODE_SUCCESS.SELECT){
+                    _this.tableData.data = res.data.data;
+                }
             })
         },
         showModel(data){
-            console.log(data);
             this.modalData.isShow = false;
+        },
+        showModelUpdate(data){
+            this.modalData.updateShow = false;
         },
         show (index) {
             this.$Modal.info({
-                title: 'User Info',
-                content: `${this.tableData[index].url}`
+                title: 'Response Info',
+                content: `
+                method: ${this.tableData.data[index].method} 
+                url: ${this.tableData.data[index].url} 
+                delayTime: ${this.tableData.data[index].delayTime} 
+                body: ${this.tableData.data[index].body} 
+                `
             })
         },
         remove (index) {
-            this.tableData.splice(index, 1);
+            this.tableData.data.splice(index, 1);
         },
         
     }

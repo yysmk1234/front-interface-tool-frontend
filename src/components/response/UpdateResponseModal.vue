@@ -2,7 +2,7 @@
     <div>
         <Modal
             v-model="innerisShowModal"
-            title="response属性"
+            title="修改response属性"
             @on-ok="ok"
             @on-cancel="cancel">
             <Form :label-width="80">
@@ -20,7 +20,7 @@
                 </FormItem>
                 
                 <FormItem label="dalyTime">
-                    <Input type="number" v-model="responseData.dalyTime" placeholder="请输入延时时长（ms）" style="width:300px" />
+                    <Input type="number" v-model="responseData.delayTime" placeholder="请输入延时时长（ms）" style="width:300px" />
                 </FormItem>
 
                 <FormItem label="statusCode">
@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import { Modal , Form ,  FormItem , Input , Select , Option} from 'view-design'
+import { Modal , Form ,  FormItem , Input , Select , Option } from 'view-design'
 
 export default {
-    props:['isShowModal'],
-    name:"SetResponseModal",
+    props:['isShowModal',"data"],
+    name:"UpdateResponseModal",
     components:{
         Modal , Form ,  FormItem , Input , Select , Option
     },
@@ -48,19 +48,21 @@ export default {
         return {
             innerisShowModal:this.isShowModal,
             responseData:{
-                method:"",
-                url:"",
-                delayTime:0,
-                statusCode:200,
-                body:''
+                id:this.data._id,
+                method:this.data.method,
+                url:this.data.url,
+                delayTime:this.data.delayTime,
+                statusCode:this.data.statusCode,
+                body:this.data.body
             }
         }
     },
     methods: {
         ok () {
             this.innerisShowModal = false;
-            this.$emit("add-response",this.responseData);
-            this.$emit("show-modal-add",this.innerisShowModal);
+            console.log(this.responseData);
+            this.$emit("update-response",this.responseData);
+            this.$emit("show-modal-update",this.innerisShowModal);
             this.responseData = {
                 method:"",
                 url:"",
@@ -71,13 +73,27 @@ export default {
         },
         cancel () {
             this.innerisShowModal = false;
-            this.$emit("show-modal",this.innerisShowModal);
+            this.$emit("show-modal-update",this.innerisShowModal);
         }
     },
     watch:{
         isShowModal(newValue,oldValue){
             this.innerisShowModal = newValue;
+        },
+        data:{
+            handler(newValue){
+                this.responseData = {
+                    id:newValue._id,
+                    method:newValue.method,
+                    url:newValue.url,
+                    delayTime:newValue.delayTime,
+                    statusCode:newValue.statusCode,
+                    body:newValue.body
+                }
+            },
+            deep:true
         }
+           
     }
 }
 </script>
