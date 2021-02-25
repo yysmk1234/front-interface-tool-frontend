@@ -31,7 +31,7 @@
 
 import {Row , Col , Card , Form , FormItem , Switch , Button} from 'view-design'
 import StatusLight from '../set/StatusLight';
-
+import { restartInterfaceServer , shutDownInterfaceServer ,getServerStatus } from '../../api/setServer'
 export default {
     name:"SetIndex",
     components:{Row , Col , Card , Form , FormItem , Switch , Button , StatusLight},
@@ -42,10 +42,22 @@ export default {
             }
         }
     },
+    mounted() {
+        this.getServerStatus();
+    },
     methods: {
+        getServerStatus () {
+            var _this = this;
+            getServerStatus().then((res)=>{
+                console.log(res);
+                _this.interfaceServer.status = res.data.data.serverStatus;
+            }).catch((err)=>{
+                console.log(err);
+            })
+        },
         startServer(){
             var _this = this;
-            this.axios.get("http://localhost:9000/manager/restartInterfaceServer").then((res)=>{
+            restartInterfaceServer().then((res)=>{
                 console.log("startRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
             }).catch((err)=>{
@@ -54,7 +66,7 @@ export default {
         },
         shutdownServer(){
             var _this = this;
-            this.axios.get("http://localhost:9000/manager/shutDownInterfaceServer").then((res)=>{
+            shutDownInterfaceServer().then((res)=>{
                 console.log("shutdownRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
             }).catch((err)=>{
