@@ -19,8 +19,8 @@
                     <Input v-model="responseData.url" placeholder="请输入请求路径" style="width:300px" />
                 </FormItem>
                 
-                <FormItem label="dalyTime">
-                    <Input type="number" v-model="responseData.dalyTime" placeholder="请输入延时时长（ms）" style="width:300px" />
+                <FormItem label="delayTime">
+                    <Input type="number" v-model="responseData.delayTime" placeholder="请输入延时时长（ms）" style="width:300px" />
                 </FormItem>
 
                 <FormItem label="statusCode">

@@ -16,6 +16,7 @@
                         <StatusLight :light-status="interfaceServer.status" style="width:10px;height:10px;margin-top: 9px;"/>
                     </FormItem>
                     <FormItem label="端口">
+                        <p>{{interfaceServer.prot}}</p>
                     </FormItem>
                     <FormItem label="操作">
                         <Button type="success" @click="startServer" style="margin-right:10px;">开启</Button>
@@ -38,7 +39,8 @@ export default {
     data() {
         return {
             interfaceServer:{
-                status:0
+                status:0,
+                prot:""
             }
         }
     },
@@ -51,6 +53,7 @@ export default {
             getServerStatus().then((res)=>{
                 console.log(res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
+                _this.interfaceServer.prot = res.data.data.prot;
             }).catch((err)=>{
                 console.log(err);
             })
@@ -60,6 +63,7 @@ export default {
             restartInterfaceServer().then((res)=>{
                 console.log("startRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
+                _this.interfaceServer.prot = res.data.data.prot;
             }).catch((err)=>{
                 console.log(err);
             })
@@ -69,6 +73,7 @@ export default {
             shutDownInterfaceServer().then((res)=>{
                 console.log("shutdownRes",res);
                 _this.interfaceServer.status = res.data.data.serverStatus;
+                _this.interfaceServer.prot = "";
             }).catch((err)=>{
                 console.log(err);
             })
